@@ -1,6 +1,6 @@
 package com.oddsonlogic.coding.advent;
 
-public class DayFour {
+public class Day4 {
     public static void main(String[] args) {
         int rangeStart = 168630;
         int rangeEnd = 718098;
