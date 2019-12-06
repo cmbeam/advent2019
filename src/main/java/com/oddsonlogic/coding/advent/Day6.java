@@ -1249,7 +1249,7 @@ public class Day6 {
                 "DT1)5Y2";
 
 
-        OrbitTree<String> orbits = new OrbitTree<String>("COM");
+        Orbit<String> orbits = new Orbit<String>("COM");
 
         List<String> maps = Arrays.asList(data.split("\n"));
         for (String map: maps) {
