@@ -107,15 +107,18 @@ public class Day1 {
                 "117809\n";
 
         List<String> items = Arrays.asList(data.split("\n"));
-        int total = 0;
+        int total1 = 0;
+        int total2 = 0;
         for (String item : items) {
             int fuel = (Integer.parseInt(item) / 3 )  -2 ;
+            total1 = total1 + fuel;
             while (fuel > 0) {
-                total = total + fuel;
+                total2 = total2 + fuel;
+
                 fuel = (fuel / 3 )  -2;
             }
 
         }
-        System.out.println(total);
+        System.out.println("Simple Total: "+total1+"  Complext Total: "+total2);
     }
 }
