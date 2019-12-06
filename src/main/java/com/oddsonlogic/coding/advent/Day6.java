@@ -2,6 +2,7 @@ package com.oddsonlogic.coding.advent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -1249,14 +1250,57 @@ public class Day6 {
                 "DT1)5Y2";
 
 
-        Orbit<String> orbits = new Orbit<String>("COM");
+        HashMap<String,String> orbitMap = new HashMap<>();
+
+        int count = 0;
 
         List<String> maps = Arrays.asList(data.split("\n"));
         for (String map: maps) {
             String orbiter = map.split("\\)")[1];
             String orbitee = map.split("\\)")[0];
+            orbitMap.put(orbiter,orbitee);
             System.out.println("orbitee: "+orbitee+" orbiter: "+orbiter);
         }
+
+        for (String map: maps) {
+            String orbiter = map.split("\\)")[1];
+            String orbitee = orbiter;
+            while(!orbiter.equals("COM")){
+                orbiter = orbitMap.get(orbiter);
+                count++;
+            }
+
+        }
+        System.out.println("count: "+count);
+
+        String youPointer="YOU";
+        String santaPointer="SAN";
+        HashMap<String, Integer> youPath = new HashMap<>();
+        HashMap<String, Integer> santaPath = new HashMap<>();
+
+        String orbiter = youPointer;
+        count=0;
+        while(!orbiter.equals("COM")){
+            orbiter = orbitMap.get(orbiter);
+            count++;
+            youPath.put(orbiter,count);
+            System.out.println("You path: "+orbiter+" "+count);
+        }
+
+        orbiter  = santaPointer;
+        count=0;
+        while(!orbiter.equals("COM")){
+            orbiter = orbitMap.get(orbiter);
+            count++;
+            if(youPath.containsKey(orbiter)) {
+                 count = count + youPath.get(orbiter);
+                break;
+            }
+
+        }
+        System.out.println("Path to santa count: " + (count - 2));
+
+
 
     }
 
