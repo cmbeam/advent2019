@@ -1254,7 +1254,6 @@ public class Day6 {
         List<String> maps = Arrays.asList(data.split("\n"));
         for (String map: maps) {
             String orbiter = map.split("\\)")[1];
-
             String orbitee = map.split("\\)")[0];
             System.out.println("orbitee: "+orbitee+" orbiter: "+orbiter);
         }
