@@ -1,8 +1,7 @@
 package com.oddsonlogic.coding.advent;
 
 
-
-
+import java.math.BigInteger;
 
 public class Day7 {
     public static void main(String[] args) {
@@ -17,7 +16,7 @@ public class Day7 {
 
         int largestSignal = 0;
 
-        int signal = 0;
+        BigInteger signal = BigInteger.ZERO;
 
         int[] phases = new int[5];
 
@@ -40,25 +39,25 @@ public class Day7 {
 
         printArray(phases);
         while(!comp5.done) {
-            comp1.inputs.add(signal);
+            comp1.inputs.add(signal.intValue());
             signal = comp1.compute();
 
-            comp2.inputs.add(signal);
+            comp2.inputs.add(signal.intValue());
             signal = comp2.compute();
 
-            comp3.inputs.add(signal);
+            comp3.inputs.add(signal.intValue());
             signal = comp3.compute();
 
-            comp4.inputs.add(signal);
+            comp4.inputs.add(signal.intValue());
             signal = comp4.compute();
 
-            comp5.inputs.add(signal);
+            comp5.inputs.add(signal.intValue());
             signal = comp5.compute();
         }
         System.out.println("Signal: "+signal);
-        if (signal >= largestSignal)
-            largestSignal = signal;
-        signal=0;
+        if (signal.intValue() >= largestSignal)
+            largestSignal = signal.intValue();
+        signal=BigInteger.ZERO;
 
         int i = 0;
         while (i < 5) {
@@ -81,26 +80,26 @@ public class Day7 {
                 comp4.inputs.add(phases[3]);
                 comp5.inputs.add(phases[4]);
                 while (!comp5.done) {
-                    comp1.inputs.add(signal);
+                    comp1.inputs.add(signal.intValue());
                     signal = comp1.compute();
 
-                    comp2.inputs.add(signal);
+                    comp2.inputs.add(signal.intValue());
                     signal = comp2.compute();
 
-                    comp3.inputs.add(signal);
+                    comp3.inputs.add(signal.intValue());
                     signal = comp3.compute();
 
-                    comp4.inputs.add(signal);
+                    comp4.inputs.add(signal.intValue());
                     signal = comp4.compute();
 
-                    comp5.inputs.add(signal);
+                    comp5.inputs.add(signal.intValue());
                     signal = comp5.compute();
                 }
 
                 System.out.println("Signal: "+signal);
-                if (signal >= largestSignal)
-                    largestSignal = signal;
-                signal=0;
+                if (signal.intValue() >= largestSignal)
+                    largestSignal = signal.intValue();
+                signal=BigInteger.ZERO;
 
                 indexes[i]++;
                 i = 0;
