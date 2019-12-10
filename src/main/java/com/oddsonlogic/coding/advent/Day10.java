@@ -1,7 +1,13 @@
 package com.oddsonlogic.coding.advent;
 
+import com.google.common.collect.Multimap;
+import org.apache.commons.collections4.MultiMap;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.map.MultiValueMap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Day10 {
@@ -43,13 +49,35 @@ public class Day10 {
 
         //data=   ".#..#\n" +".....\n" +"#####\n" +"....#\n" +"...##";
 
+        /*
+        data=".#..##.###...#######\n" +
+                "##.############..##.\n" +
+                ".#.######.########.#\n" +
+                ".###.#######.####.#.\n" +
+                "#####.##.#.##.###.##\n" +
+                "..#####..#.#########\n" +
+                "####################\n" +
+                "#.####....###.#.#.##\n" +
+                "##.#################\n" +
+                "#####.##.###..####..\n" +
+                "..######..##.#######\n" +
+                "####.##.####...##..#\n" +
+                ".#####..#.######.###\n" +
+                "##...#.##########...\n" +
+                "#.##########.#######\n" +
+                ".####.#.###.###.#.##\n" +
+                "....##.##.###..#####\n" +
+                ".#.#.###########.###\n" +
+                "#.#.#.#####.####.###\n" +
+                "###.##.####.##.#..##"; */
+
         List<Coordinates> asteroids = new ArrayList<>();
         int mostAsteroids = 0;
         Coordinates bestAsteroid = new Coordinates();
 
         List<String> dataArray = Arrays.asList(data.split("\n"));
-        int y = dataArray.size() - 1;
-
+        //int y = dataArray.size() - 1;
+        int y = 0;
         for (String line : dataArray) {
             for (int i = 0; i < line.length() ; i++) {
                 if(line.charAt(i)=='#') {
@@ -59,7 +87,7 @@ public class Day10 {
                     asteroids.add(coord);
                 }
             }
-            y--;
+            y++;
 
         }
 
@@ -89,19 +117,52 @@ public class Day10 {
 
         //PART 2
         Coordinates winnerAsteroid = new Coordinates();
-        winnerAsteroid.x = 29;
-        winnerAsteroid.y = 4;
-
-        List<String> lineOfSight = new ArrayList<>();
+        winnerAsteroid.x  = bestAsteroid.x;// 29;
+        winnerAsteroid.y =bestAsteroid.y;// 4;
+        Coordinates finalAsteroid = new Coordinates();
+        HashMap<String,List<Coordinates>> otherAsteroids = new HashMap<>();
         for (Coordinates candidateAsteroid: asteroids) {
-            String vector = ""+slope(winnerAsteroid,candidateAsteroid)+" "+direction(winnerAsteroid,candidateAsteroid);
-            //System.out.println(vector);
             String angle = ""+angle(winnerAsteroid,candidateAsteroid);
-           // System.out.println(  "Angle: "+angle + " Vector: "+vector );
-            if(!lineOfSight.contains(angle))
-                lineOfSight.add(angle);
+            if(!(candidateAsteroid.x ==0 && candidateAsteroid.y==0)) {
+                if (!otherAsteroids.containsKey(angle)) {
+                    List<Coordinates> list = new ArrayList<>();
+                    list.add(candidateAsteroid);
+                    otherAsteroids.put(angle, list);
+                } else {
+                    List<Coordinates> list = otherAsteroids.get(angle);
+                    list.add(candidateAsteroid);
+                }
+            }
         }
-        //System.out.println("Line of sight number: "+(lineOfSight.size()));
+
+        int count = 0;
+        boolean done = false;
+        while(!done){
+            for (int i = 0; i  <3600000 ; i++) {
+                if(otherAsteroids.containsKey(""+i)) {
+                    count++;
+
+                    //finalAsteroid = otherAsteroids.get("" + i).remove(0);
+                    List<Coordinates> candidates = otherAsteroids.get(""+i);
+                    System.out.println(count+"Vaporized: "+candidates.get(0).x+","+candidates.get(0).y+" "+i+"    "+candidates.size());
+                    //System.out.println((count) + "Asteroid Vaporized: "+finalAsteroid.x+","+finalAsteroid.y + "  "+i);
+                   //if(otherAsteroids.get("" + i ).size() == 0)
+                     // otherAsteroids.remove(""+i);
+                    if (count == 200) {
+                        done=true;
+
+                        for (int j = 0; j < candidates.size(); j++) {
+                            System.out.println("final asteroid: "+candidates.get(j).x+","+candidates.get(j).y);
+                        }
+                        //System.out.println("Final asteroid: "+finalAsteroid.x+","+finalAsteroid.y);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
 
 
 
@@ -133,19 +194,19 @@ public class Day10 {
         int yDifference=end.y-start.y;
         if(xDifference==0 && yDifference==0)
             return 999999999;
-        else if(xDifference >= 0 && yDifference >= 0) {   //sector 1
+        else if(xDifference >= 0 && yDifference <= 0) {   //sector 1
             if(slope(start,end) > 1 || slope(start,end) < -1 )
-                return (int)((1/slope(start,end))*450000);
+                return Math.abs((int)((1/slope(start,end))*450000));
             else
-                return 900000 - (int)((slope(start,end))*450000) ;
+                return 900000 - Math.abs((int)((slope(start,end))*450000)) ;
         }
-        else if(xDifference >= 0 && yDifference <= 0) {  //sector 2
+        else if(xDifference >= 0 && yDifference >= 0) {  //sector 2
             if (slope(start,end) > 1 || slope(start,end) < -1 )
                 return 1800000 - Math.abs((int) ((1 / slope(start, end)) * 450000));
             else
                 return 900000 + Math.abs((int) ((slope(start, end)) * 450000));
         }
-        else if(xDifference <= 0 && yDifference >= 0) {  //sector 4
+        else if(xDifference <= 0 && yDifference <= 0) {  //sector 4
             if (slope(start,end) > 1 || slope(start,end) < -1 )
                 return 3600000 - Math.abs((int) ((1 / slope(start, end)) * 450000));
             else
