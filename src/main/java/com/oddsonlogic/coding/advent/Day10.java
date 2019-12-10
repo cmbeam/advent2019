@@ -41,11 +41,11 @@ public class Day10 {
                 ".#....#.#...#.#...##....#..##.#.#\n" +
                 ".#.#....##.......#.....##.##.#.##";
 
-        /*data=".#..#\n" +
+        data=".#..#\n" +
                 ".....\n" +
                 "#####\n" +
                 "....#\n" +
-                "...##";*/
+                "...##";
 
         List<Coordinates> asteroids = new ArrayList<>();
         int mostAsteroids = 0;
@@ -72,6 +72,7 @@ public class Day10 {
             for (Coordinates candidateAsteroid: asteroids) {
                 String vector = ""+slope(asteroid,candidateAsteroid)+" "+direction(asteroid,candidateAsteroid);
                 System.out.println(vector);
+                System.out.println("Angle: "+ angle(asteroid,candidateAsteroid));
                 if(!lineOfSight.contains(vector))
                         lineOfSight.add(vector);
             }
@@ -106,6 +107,22 @@ public class Day10 {
             return 1;
         else
             return 0;
+    }
+
+    static int angle(Coordinates start, Coordinates end) {
+
+        int xDifference=end.x-start.x;
+        int yDifference=end.y-start.y;
+        if(xDifference==0 && yDifference==0)
+            return 9999;
+        else if(xDifference >= 0 && yDifference >= 0)
+            return 1;
+        else if(xDifference >= 0 && yDifference <= 0)
+            return 2;
+        else if(xDifference <= 0 && yDifference >= 0)
+            return 4;
+        else
+            return 3;
     }
 
 
