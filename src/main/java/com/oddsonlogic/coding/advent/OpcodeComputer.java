@@ -69,7 +69,7 @@ public class OpcodeComputer {
                     break;
                 case 4:
                     output=new BigInteger(items.get(op2.intValue()));
-                    System.out.println("Output: " + items.get(op2.intValue()));
+                    //System.out.println("Output: " + items.get(op2.intValue()));
                     position = position + 2;
                     return output;
 
@@ -184,7 +184,7 @@ public class OpcodeComputer {
                         case 4:
                             //output=new BigInteger(items.get(value1.intValue()));
                             output=value1;
-                            System.out.println("Output: " + items.get(value1.intValue()));
+                           // System.out.println("Output: " + items.get(value1.intValue()));
                             position = position + 2;
                             inputs.clear();
                             return output;
