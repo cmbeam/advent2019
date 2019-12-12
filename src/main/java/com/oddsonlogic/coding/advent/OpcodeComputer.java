@@ -11,7 +11,7 @@ public class OpcodeComputer {
 
     String program ="";
     List<String> items;
-    int extraMemory = 100000000;
+    int extraMemory = 10000;
 
     int position=0;
     BigInteger output=new BigInteger("0");
@@ -154,7 +154,7 @@ public class OpcodeComputer {
 
 
                     if(op1.mod(new BigInteger("10")).equals(BigInteger.ZERO)) {
-                        if (newOp1 ==1 || newOp1==2 ||newOp1==7||newOp1==8)
+                        if (newOp1 ==1 || newOp1==2 || newOp1==5 || newOp1==6||newOp1==7||newOp1==8)
                             value2 = new BigInteger(items.get(op3.intValue()));
                         else
                             value2 = op3;
@@ -163,7 +163,7 @@ public class OpcodeComputer {
                         value2 = op3;
                     }
                     else {
-                        if (newOp1 ==1 || newOp1==2 ||newOp1==7||newOp1==8)
+                        if (newOp1 ==1 || newOp1==2 || newOp1==5 || newOp1==6||newOp1==7||newOp1==8)
                             value2 = new BigInteger(items.get(op3.add(BigInteger.valueOf(relativeBase)).intValue()));
                         else
                             value2 = op3.add(BigInteger.valueOf(relativeBase));

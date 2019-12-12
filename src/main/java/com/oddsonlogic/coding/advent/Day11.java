@@ -9,10 +9,10 @@ public class Day11 {
 
 
         OpcodeComputer computer = new OpcodeComputer(program);
-             computer.extraMemory=10000;
+             computer.extraMemory=1000000;
 
-        int GRID_X_DIMENSION = 50000;
-        int GRID_Y_DIMENSION = 50000;
+        int GRID_X_DIMENSION = 100;
+        int GRID_Y_DIMENSION = 100;
         int[][] grid = new int[GRID_X_DIMENSION][GRID_Y_DIMENSION];
         for (int i = 0; i <GRID_X_DIMENSION ; i++) {
             for (int j = 0; j < GRID_Y_DIMENSION; j++) {
@@ -26,7 +26,7 @@ public class Day11 {
 
 
 
-        computer.inputs.add(0);
+        computer.inputs.add(1);
         while(!computer.done) {
             BigInteger output1 = computer.compute();
             BigInteger output2 = computer.compute();
@@ -107,5 +107,15 @@ public class Day11 {
         }
 
         System.out.println("Panels painted: "+count);
+
+        for (int i = 0; i <GRID_X_DIMENSION ; i++) {
+            for (int j = 0; j < GRID_Y_DIMENSION; j++) {
+                if(grid[i][j] == 1)
+                    System.out.print("x");
+                else
+                    System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
 }
