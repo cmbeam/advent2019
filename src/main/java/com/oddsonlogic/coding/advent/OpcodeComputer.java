@@ -49,6 +49,10 @@ public class OpcodeComputer {
                 System.out.println(e.getMessage());
                 op4 = BigInteger.ZERO;
             }
+
+
+
+            /*
             switch (op1.intValue()) {
                 case 1:
                     value1 = new BigInteger(items.get(op2.intValue()));
@@ -112,29 +116,36 @@ public class OpcodeComputer {
 
                     break;
                 default:
+                */
+                    int oOp1 = op1.intValue();
                     int newOp1 = op1.mod(new BigInteger("10")).intValue();
+
                     op1 = op1.divide(new BigInteger("100"));
 
 
 
-                    if(newOp1!=3 && newOp1!=4 && op1.mod(new BigInteger("10")).equals(BigInteger.ZERO)) {
-                        value1 = new BigInteger(items.get(op2.intValue()));
+                    if(op1.mod(new BigInteger("10")).equals(BigInteger.ZERO)) {
+                        if(newOp1 == 3)
+                            value1 = op2;
+                        else
+                            value1 = new BigInteger(items.get(op2.intValue()));
                     }
-                    else if(newOp1!=3 && op1.mod(new BigInteger("10")).equals(new BigInteger("1"))) {
-                        value1 = BigInteger.valueOf(op2.intValue());
+                    else if(op1.mod(new BigInteger("10")).equals(new BigInteger("1"))) {
+                        value1 = op2;
                     }
                     else {
-                        if (newOp1 == 3 || newOp1 == 4)
+                        if (newOp1 == 3)// || newOp1 == 4)
                             value1 = op2.add(BigInteger.valueOf(relativeBase));
                         else
                             value1 = new BigInteger(items.get(op2.add(BigInteger.valueOf(relativeBase)).intValue()));
                     }
+
                     op1 = op1.divide(new BigInteger("10"));
 
 
 
                     if(op1.mod(new BigInteger("10")).equals(BigInteger.ZERO)) {
-                        if (newOp1 ==1 || newOp1==2 || newOp1 ==5||newOp1==6)
+                        if (newOp1 ==1 || newOp1==2 ||newOp1==7||newOp1==8)
                             value2 = new BigInteger(items.get(op3.intValue()));
                         else
                             value2 = op3;
@@ -143,8 +154,12 @@ public class OpcodeComputer {
                         value2 = op3;
                     }
                     else {
+                        if (newOp1 ==1 || newOp1==2 ||newOp1==7||newOp1==8)
                             value2 = new BigInteger(items.get(op3.add(BigInteger.valueOf(relativeBase)).intValue()));
+                        else
+                            value2 = op3.add(BigInteger.valueOf(relativeBase));
                     }
+
                     op1 = op1.divide(new BigInteger("10"));
 
 
@@ -166,6 +181,10 @@ public class OpcodeComputer {
                                 value3 = BigInteger.ZERO;
                             }
                     }
+
+
+
+
 
                     switch (newOp1) {
                         case 1:
@@ -223,9 +242,6 @@ public class OpcodeComputer {
                         default:
                             break;
                     }
-
-                    break;
-            }
 
             op1 = new BigInteger(items.get(position));
         }

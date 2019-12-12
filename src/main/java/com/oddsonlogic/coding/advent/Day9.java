@@ -14,7 +14,7 @@ public class Day9 {
         comp.inputs.add(2);
         while(!comp.done) {
             BigInteger output = comp.compute();
-            //System.out.println("Output: " + output);
+            System.out.println("Output: " + output);
         }
 
     }
