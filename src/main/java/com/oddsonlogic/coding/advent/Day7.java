@@ -7,11 +7,12 @@ public class Day7 {
     public static void main(String[] args) {
         boolean feedbackMode = true;
 
-        OpcodeComputer comp1 = new OpcodeComputer();
-        OpcodeComputer comp2 = new OpcodeComputer();
-        OpcodeComputer comp3 = new OpcodeComputer();
-        OpcodeComputer comp4 = new OpcodeComputer();
-        OpcodeComputer comp5 = new OpcodeComputer();
+        String program = "";
+        OpcodeComputer comp1 = new OpcodeComputer(program);
+        OpcodeComputer comp2 = new OpcodeComputer(program);
+        OpcodeComputer comp3 = new OpcodeComputer(program);
+        OpcodeComputer comp4 = new OpcodeComputer(program);
+        OpcodeComputer comp5 = new OpcodeComputer(program);
 
 
         int largestSignal = 0;

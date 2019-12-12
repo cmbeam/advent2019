@@ -10,6 +10,7 @@ public class OpcodeComputer {
 
 
     String program ="";
+    List<String> items;
     int extraMemory = 100000000;
 
     int position=0;
@@ -18,18 +19,26 @@ public class OpcodeComputer {
     ArrayList<Integer> inputs = new ArrayList<>();
     int relativeBase = 0;
 
+    public OpcodeComputer(String program){
+        this.program = program;
+        this.items = new ArrayList<>(Arrays.asList(program.split(",")));
+        for (int i = 0; i <extraMemory ; i++) {
+            items.add(items.size(), "0");
+        }
+    }
+
     public void reset(){
         this.position = 0;
         this.output = BigInteger.ZERO;
         this.done = false;
+        this.items = new ArrayList<>(Arrays.asList(program.split(",")));
+        for (int i = 0; i <extraMemory ; i++) {
+            items.add(items.size(),"0");
+        }
     }
 
     public BigInteger compute(){
         int inputCount = 0;
-        List<String> items = new ArrayList<>(Arrays.asList(program.split(",")));
-        for (int i = 0; i <extraMemory ; i++) {
-            items.add(items.size(),"0");
-        }
 
 
         BigInteger op1, op2, op3, op4;
