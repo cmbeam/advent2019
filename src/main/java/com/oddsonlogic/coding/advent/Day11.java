@@ -8,8 +8,8 @@ public class Day11 {
 
 
 
-        OpcodeComputer computer = new OpcodeComputer(program);
-             computer.extraMemory=1000000;
+        OpcodeComputer computer = new OpcodeComputer(program,1000000);
+
 
         int GRID_X_DIMENSION = 100;
         int GRID_Y_DIMENSION = 100;

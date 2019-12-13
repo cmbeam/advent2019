@@ -19,7 +19,7 @@ public class OpcodeComputer {
     ArrayList<Integer> inputs = new ArrayList<>();
     int relativeBase = 0;
 
-    public OpcodeComputer(String program){
+    public OpcodeComputer(String program, int extraMemory){
         this.program = program;
         this.items = new ArrayList<>(Arrays.asList(program.split(",")));
         for (int i = 0; i <extraMemory ; i++) {
