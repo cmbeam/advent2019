@@ -4,9 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Day15 extends Canvas {
+
+    static int ROW = 400;
+    static int COL = 400;
 
     static boolean INTERACTIVE_MODE = true;
     static int SCREEN_WIDTH = 200;
@@ -90,6 +96,8 @@ public class Day15 extends Canvas {
 
         ex.computer = new OpcodeComputer(program, 1000);
 
+        System.out.println(findShortestPath(ex.computer));
+        /*
         int paddleCoord = 0;
         int positionX = SCREEN_WIDTH/2;
         int positionY = SCREEN_HEIGHT/2;
@@ -178,6 +186,8 @@ public class Day15 extends Canvas {
                     Thread.currentThread().interrupt();
                 }
 
+         */
+
 /*
                 for (int i = SCREEN_HEIGHT-1; i >= 0; i--) {
                     for (int j = 0; j < SCREEN_WIDTH; j++) {
@@ -187,7 +197,7 @@ public class Day15 extends Canvas {
                 }
                 */
 
-
+/*
                 //ex.repaint();
 
 
@@ -207,7 +217,7 @@ public class Day15 extends Canvas {
 
         //Part 1 System.out.println("Number of blocks: "+blockCount);
 
-
+*/
 
         }
 
@@ -248,5 +258,102 @@ public class Day15 extends Canvas {
                 return 0;
         }
 
+    }
+
+
+    static class Point
+    {
+        int x;
+        int y;
+
+        public Point(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    };
+
+    // A Data Structure for queue used in BFS
+    static class queueNode
+    {
+        Point pt; // The cordinates of a cell
+        int dist; // cell's distance of from the source
+
+        public queueNode(Point pt, int dist)
+        {
+            this.pt = pt;
+            this.dist = dist;
+        }
+    };
+
+    // check whether given cell (row, col)
+// is a valid cell or not.
+    static boolean isValid(int row, int col)
+    {
+        // return true if row number and
+        // column number is in range
+        return (row >= 0) && (row < ROW) &&
+                (col >= 0) && (col < COL);
+    }
+
+
+    static int rowNum[] = {1, -1, 0, 0};
+    static int colNum[] = {0, 0, -1, 1};
+
+
+    static int findShortestPath(OpcodeComputer computer)
+    {
+
+        boolean [][]visited = new boolean[ROW][COL];
+
+        // Mark the source cell as visited
+        //visited[src.x][src.y] = true;
+
+        // Create a queue for BFS
+        Queue<queueNode> queue = new LinkedList<>();
+
+        // Distance of start point is 0
+        queueNode s = new queueNode(new Point(100,100), 0);
+        queue.add(s); // Enqueue source cell
+
+        while (!queue.isEmpty())
+        {
+            queueNode curr = queue.peek();
+            Point pt = curr.pt;
+
+            // If we have reached the destination cell,
+            // we are done
+            //if (pt.x == dest.x && pt.y == dest.y)
+            //    return curr.dist;
+
+            // Otherwise dequeue the front cell
+            // in the queue and enqueue
+            // its adjacent cells
+            queue.remove();
+
+            for (int i = 0; i < 4; i++)
+            {
+                int row = pt.x + rowNum[i];
+                int col = pt.y + colNum[i];
+
+                // if adjacent cell is valid, has path
+                // and not visited yet, enqueue it.
+                computer.inputs.add(i+1);
+                BigInteger status = computer.compute();
+                if(status.intValue() == 2)
+                    return curr.dist;
+                if (!visited[row][col] && status.equals( BigInteger.valueOf(1)))
+                {
+                    // mark cell as visited and enqueue it
+                    visited[row][col] = true;
+                    queueNode Adjcell = new queueNode(new Point(row, col),
+                            curr.dist + 1 );
+                    queue.add(Adjcell);
+                }
+            }
+        }
+
+        // Return -1 if destination cannot be reached
+        return -1;
     }
 }
