@@ -229,7 +229,7 @@ public class OpcodeComputer {
                             output=value1;
                            // System.out.println("Output: " + items.get(value1.intValue()));
                             position = position + 2;
-                            inputs.clear();
+                            //inputs.clear();
                             return output;
 
                         case 5:
