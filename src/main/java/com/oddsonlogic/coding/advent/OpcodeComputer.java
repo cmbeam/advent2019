@@ -27,6 +27,21 @@ public class OpcodeComputer {
         }
     }
 
+    public OpcodeComputer(OpcodeComputer copy){
+        this.program = copy.program;
+        //this.inputs = copy.inputs;
+        this.extraMemory = copy.extraMemory;
+        this.position = copy.position;
+        //this.items = copy.items;
+        this.items = new ArrayList<>();
+        for (int i = 0; i < copy.items.size(); i++) {
+            this.items.add(copy.items.get(i));
+        }
+        for (int i = 0; i <extraMemory ; i++) {
+            items.add(items.size(), "0");
+        }
+    }
+
     public void reset(){
         this.position = 0;
         this.output = BigInteger.ZERO;

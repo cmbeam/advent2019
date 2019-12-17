@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 public class Day15 extends Canvas {
 
-    static int ROW = 400;
-    static int COL = 400;
+    static int ROW = 100;
+    static int COL = 100;
 
     static boolean INTERACTIVE_MODE = true;
-    static int SCREEN_WIDTH = 200;
-    static int SCREEN_HEIGHT = 200;
+    static int SCREEN_WIDTH = COL;
+    static int SCREEN_HEIGHT = ROW;
     int refreshRate = 1;
     int joystick = 0;
     String[][] grid = new String[SCREEN_WIDTH][SCREEN_HEIGHT];
@@ -96,8 +96,8 @@ public class Day15 extends Canvas {
 
         ex.computer = new OpcodeComputer(program, 1000);
 
-        System.out.println(findShortestPath(ex.computer));
-        /*
+
+
         int paddleCoord = 0;
         int positionX = SCREEN_WIDTH/2;
         int positionY = SCREEN_HEIGHT/2;
@@ -186,7 +186,7 @@ public class Day15 extends Canvas {
                     Thread.currentThread().interrupt();
                 }
 
-         */
+
 
 /*
                 for (int i = SCREEN_HEIGHT-1; i >= 0; i--) {
@@ -197,7 +197,7 @@ public class Day15 extends Canvas {
                 }
                 */
 
-/*
+
                 //ex.repaint();
 
 
@@ -216,8 +216,10 @@ public class Day15 extends Canvas {
         //System.out.println("Score:   " + score);
 
         //Part 1 System.out.println("Number of blocks: "+blockCount);
+        findShortestPath(ex.computer);
+        ex.computer.reset();
+        System.out.println(findShortestPath(ex.computer));
 
-*/
 
         }
 
@@ -274,15 +276,19 @@ public class Day15 extends Canvas {
     };
 
     // A Data Structure for queue used in BFS
-    static class queueNode
+    static class QueueNode
     {
         Point pt; // The cordinates of a cell
         int dist; // cell's distance of from the source
+        OpcodeComputer computer;
+        int time;
 
-        public queueNode(Point pt, int dist)
+        public QueueNode(Point pt, int dist, OpcodeComputer computer, int time)
         {
             this.pt = pt;
             this.dist = dist;
+            this.computer = computer;
+            this.time = time;
         }
     };
 
@@ -307,18 +313,19 @@ public class Day15 extends Canvas {
         boolean [][]visited = new boolean[ROW][COL];
 
         // Mark the source cell as visited
-        //visited[src.x][src.y] = true;
+        visited[COL/2][ROW/2] = true;
 
-        // Create a queue for BFS
-        Queue<queueNode> queue = new LinkedList<>();
+
+        Queue<QueueNode> queue = new LinkedList<>();
 
         // Distance of start point is 0
-        queueNode s = new queueNode(new Point(100,100), 0);
-        queue.add(s); // Enqueue source cell
-
+        OpcodeComputer queedComputer = new OpcodeComputer(computer);
+        QueueNode node = new QueueNode(new Point(COL/2,ROW/2), 0, queedComputer,0);
+        queue.add(node); // Enqueue source cell
+        int oxygenTime = 0;
         while (!queue.isEmpty())
         {
-            queueNode curr = queue.peek();
+            QueueNode curr = queue.peek();
             Point pt = curr.pt;
 
             // If we have reached the destination cell,
@@ -331,6 +338,7 @@ public class Day15 extends Canvas {
             // its adjacent cells
             queue.remove();
 
+
             for (int i = 0; i < 4; i++)
             {
                 int row = pt.x + rowNum[i];
@@ -338,22 +346,31 @@ public class Day15 extends Canvas {
 
                 // if adjacent cell is valid, has path
                 // and not visited yet, enqueue it.
-                computer.inputs.add(i+1);
-                BigInteger status = computer.compute();
-                if(status.intValue() == 2)
-                    return curr.dist;
+                OpcodeComputer newComp = new OpcodeComputer(curr.computer);
+                newComp.inputs.add(i+1);
+                BigInteger status = newComp.compute();
+                if(!visited[row][col] && status.intValue() == 2) {
+
+                    return curr.dist+1;
+                }
                 if (!visited[row][col] && status.equals( BigInteger.valueOf(1)))
                 {
                     // mark cell as visited and enqueue it
+
                     visited[row][col] = true;
-                    queueNode Adjcell = new queueNode(new Point(row, col),
-                            curr.dist + 1 );
+                    QueueNode Adjcell = new QueueNode(new Point(row, col),
+                            curr.dist + 1 ,newComp,curr.time+1);
                     queue.add(Adjcell);
+                    System.out.println("Generation: "+(curr.time+1));
+
                 }
+
             }
+
         }
 
         // Return -1 if destination cannot be reached
+        System.out.println("oxygen fill in "+oxygenTime+" minutes");
         return -1;
     }
 }
