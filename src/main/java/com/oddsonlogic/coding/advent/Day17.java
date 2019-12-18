@@ -15,10 +15,10 @@ public class Day17 {
 
 
 
-        String movementRoutine="A,B,C,A\n";
-        String aFunction="L,12,L,10,R,8,L,12,R\n";
-        String bFunction="8,R,4,L,10,L\n";
-        String cFunction="R,R,8,R,8,R,10,R,12\n";
+        String movementRoutine="A,B,A,B,C,C,B,A,B,C\n";
+        String aFunction="L,12,L,10,R,8,L,12\n";
+        String bFunction="R,8,R,10,R,12\n";
+        String cFunction="L,10,R,12,R,8\n";
         computer.inputs.addAll(asciiToInputs(movementRoutine));//add(Integer.parseInt(convertToASCII(movementRoutine)));
         computer.inputs.addAll(asciiToInputs(aFunction));
         computer.inputs.addAll(asciiToInputs(bFunction));
