@@ -1,6 +1,5 @@
 package com.oddsonlogic.coding.advent;
 
-import java.math.BigInteger;
 import java.util.*;
 
 public class Day18 {
@@ -95,6 +94,35 @@ public class Day18 {
                 "#.#########.#.#####.###.#####.#.###.#.#.#.###.#.#.#.###.#.#########.#.#.#######.#\n" +
                 "#...........#..r....M.#.......#v......#.#.....#.#.......#.............#.........#\n" +
                 "#################################################################################";
+/*
+        input="#########\n" +
+                "#b.A.@.a#\n" +
+                "#########";
+
+       input="########################\n" +
+               "#f.D.E.e.C.b.A.@.a.B.c.#\n" +
+               "######################.#\n" +
+               "#d.....................#\n" +
+               "########################";
+
+
+       input="########################\n" +
+               "#...............b.C.D.f#\n" +
+               "#.######################\n" +
+               "#.....@.a.B.c.d.A.e.F.g#\n" +
+               "########################";
+
+       input="#################\n" +
+               "#i.G..c...e..H.p#\n" +
+               "########.########\n" +
+               "#j.A..b...f..D.o#\n" +
+               "########@########\n" +
+               "#k.E..a...g..B.n#\n" +
+               "########.########\n" +
+               "#l.F..d...h..C.m#\n" +
+               "#################";
+
+ */
 
         List<String> items = Arrays.asList(input.split("\n"));
         Day18 day18 = new Day18();
@@ -134,19 +162,30 @@ public class Day18 {
 
         Coordinates currentLocation = day18.start;
         //while doors exist
-        while(day18.doors.size() > 0) {
+        while(day18.keys.size() > 0) {
+
+
             //shortest distance to all accessible keys and accessible unlockable doors
+            Coordinates closest = new Coordinates();
+            int smallestPath = 0;
             for (Map.Entry<String,String> key : day18.keys.entrySet()) {
                 int path = day18.findShortestPath(currentLocation,Coordinates.stringValue(key.getKey()));
-                System.out.println("key "+key.getValue()+" path: "+path);
+                if(path > smallestPath){
+                    smallestPath = path;
+                    closest = Coordinates.stringValue(key.getKey());
+                }
             }
-            day18.doors.clear();
-            //go to closest key or door
-            //update step counter with steps taken to key or door
-            //Remove key or door
 
+
+            stepCounter = stepCounter + smallestPath;
+            currentLocation = closest;
+
+            System.out.println(day18.keys.get(currentLocation.toString())+" Steps: "+stepCounter);
+            day18.keys.remove(closest.toString());
 
         }
+
+
 
 
         System.out.println();
@@ -193,8 +232,13 @@ public class Day18 {
     public boolean isEmpty(Coordinates endpoint) {
         if(keys.containsKey(endpoint.toString()))
             return false;
-        else if(doors.containsKey(endpoint.toString()))
-            return false;
+        else if(doors.containsKey(endpoint.toString())) {
+            if(keys.containsValue(""+Character.toLowerCase(doors.get(endpoint.toString()).charAt(0)))) {
+                return false;
+            }
+            else
+                return true;
+        }
         else if(walls.contains(endpoint.toString()))
             return false;
         else
@@ -278,25 +322,25 @@ public class Day18 {
 
             for (int i = 0; i < 4; i++)
             {
-                int row = pt.x + rowNum[i];
-                int col = pt.y + colNum[i];
+                int row = pt.y + rowNum[i];
+                int col = pt.x + colNum[i];
 
                 Coordinates currPoint = new Coordinates();
-                currPoint.x = row;
-                currPoint.y = col;
+                currPoint.x = col;
+                currPoint.y = row;
                 // if adjacent cell is valid, has path
                 // and not visited yet, enqueue it.
 
-                if(isValid(row, col, height, width) && !visited[row][col] && endPoint.x == col && endPoint.y == row) {
+                if(isValid(row, col, height, width) && !visited[col][row] && endPoint.x == col && endPoint.y == row) {
 
                     return curr.dist+1;
                 }
-                if (isValid(row, col, height, width) && !visited[row][col]  && isEmpty(currPoint))
+                if (isValid(row, col, height, width) && !visited[col][row]  && isEmpty(currPoint))
                 {
                     // mark cell as visited and enqueue it
 
-                    visited[row][col] = true;
-                    QueueNode Adjcell = new QueueNode(new Point(row, col),
+                    visited[col][row] = true;
+                    QueueNode Adjcell = new QueueNode(new Point(col, row),
                             curr.dist + 1);
                     queue.add(Adjcell);
 
@@ -307,7 +351,7 @@ public class Day18 {
         }
 
         // Return -1 if destination cannot be reached
-        return -1;
+        return -1;//99999999;
     }
 
 }
