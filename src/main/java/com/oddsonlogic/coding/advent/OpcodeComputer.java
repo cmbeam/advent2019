@@ -274,4 +274,17 @@ public class OpcodeComputer {
         System.out.println("Output99");
         return output;
     }
+
+    static ArrayList<Integer> asciiToInputs(String string) {
+        ArrayList<Integer> inputs = new ArrayList<>();
+        for (int i = 0; i < string.length(); i++) {
+            inputs.add((int)string.charAt(i));
+
+        }
+        return inputs;
+    }
+
+    static char asciiToChar(int input){
+        return (char)input;
+    }
 }
