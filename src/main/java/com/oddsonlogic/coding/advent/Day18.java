@@ -111,7 +111,7 @@ public class Day18 {
                "#.######################\n" +
                "#.....@.a.B.c.d.A.e.F.g#\n" +
                "########################";
-
+*/
        input="#################\n" +
                "#i.G..c...e..H.p#\n" +
                "########.########\n" +
@@ -122,7 +122,7 @@ public class Day18 {
                "#l.F..d...h..C.m#\n" +
                "#################";
 
- */
+
 
         List<String> items = Arrays.asList(input.split("\n"));
         Day18 day18 = new Day18();
@@ -162,6 +162,7 @@ public class Day18 {
 
         Coordinates currentLocation = day18.start;
         //while doors exist
+        /*
         while(day18.keys.size() > 0) {
 
 
@@ -184,13 +185,14 @@ public class Day18 {
             day18.keys.remove(closest.toString());
 
         }
-
+*/
+        int steps = day18.findShortestWaypoints(currentLocation,day18.keys,day18.doors);
 
 
 
         System.out.println();
         System.out.println();
-        System.out.println("Steps: "+stepCounter);
+        System.out.println("Steps: "+steps);
 
     }
     public  void printMaze(){
@@ -229,7 +231,7 @@ public class Day18 {
         return true;
     }
 
-    public boolean isEmpty(Coordinates endpoint) {
+    public boolean isEmpty(Coordinates endpoint, HashMap<String,String> keys) {
         if(keys.containsKey(endpoint.toString()))
             return false;
         else if(doors.containsKey(endpoint.toString())) {
@@ -274,6 +276,22 @@ public class Day18 {
         }
     };
 
+    static class QueueObjects
+    {
+        HashMap<String,String> keys;
+        HashMap<String,String> doors;
+        int dist; // cell's distance of from the source
+        Coordinates location;
+
+        public QueueObjects(Coordinates location, HashMap<String,String> keys, HashMap<String,String> doors,int dist)
+        {
+            this.location = location;
+            this.keys = keys;
+            this.doors = doors;
+            this.dist = dist;
+        }
+    };
+
     // check whether given cell (row, col)
     // is a valid cell or not.
     static boolean isValid(int row, int col,int rowMax, int colMax)
@@ -290,7 +308,7 @@ public class Day18 {
 
 
 
-    public int findShortestPath(Coordinates startPoint, Coordinates endPoint)
+    public int findShortestPath(Coordinates startPoint, Coordinates endPoint, HashMap<String,String> keys)
     {
 
         boolean [][]visited = new boolean[width][height];
@@ -335,7 +353,7 @@ public class Day18 {
 
                     return curr.dist+1;
                 }
-                if (isValid(row, col, height, width) && !visited[col][row]  && isEmpty(currPoint))
+                if (isValid(row, col, height, width) && !visited[col][row]  && isEmpty(currPoint,keys))
                 {
                     // mark cell as visited and enqueue it
 
@@ -347,6 +365,54 @@ public class Day18 {
                 }
 
             }
+
+        }
+
+        // Return -1 if destination cannot be reached
+        return -1;//99999999;
+    }
+
+    public int findShortestWaypoints(Coordinates location, HashMap<String,String> keys, HashMap<String,String> doors)
+    {
+
+        boolean []used = new boolean[keys.size()];
+
+
+        Queue<QueueObjects> queue = new LinkedList<>();
+
+        // Distance of start point is 0
+        QueueObjects qObjects = new QueueObjects(location,keys,doors,0);
+        queue.add(qObjects);
+        while (!queue.isEmpty())
+        {
+            QueueObjects curr = queue.peek();
+
+            Coordinates currentLocation = curr.location;
+            // If no more keys,
+            // we are done
+            if (curr.keys.size()==0)
+                return curr.dist;
+
+
+            queue.remove();
+
+            //shortest distance to all accessible keys and accessible unlockable doors
+            Coordinates closest = new Coordinates();
+            int smallestPath = 0;
+
+            for (Map.Entry<String,String> key : curr.keys.entrySet()) {
+                int path = findShortestPath(currentLocation,Coordinates.stringValue(key.getKey()),curr.keys);
+                if(path!=-1) {
+                    currentLocation = Coordinates.stringValue(key.getKey());
+                    HashMap<String,String> newKeys = new HashMap<>(curr.keys);
+                    newKeys.remove(currentLocation.toString());
+                    QueueObjects possiblePath = new QueueObjects(currentLocation, newKeys, curr.doors,
+                            curr.dist + path);
+                    queue.add(possiblePath);
+                    System.out.println(newKeys.size()+"  "+curr.keys.get(currentLocation.toString()) + " queued waypoint " + possiblePath.location.toString());
+                }
+            }
+
 
         }
 

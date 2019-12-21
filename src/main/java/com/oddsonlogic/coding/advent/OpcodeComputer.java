@@ -46,6 +46,7 @@ public class OpcodeComputer {
         this.position = 0;
         this.output = BigInteger.ZERO;
         this.done = false;
+        this.relativeBase =0;
         this.items = new ArrayList<>(Arrays.asList(program.split(",")));
         for (int i = 0; i <extraMemory ; i++) {
             items.add(items.size(),"0");
